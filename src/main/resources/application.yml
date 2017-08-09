@@ -1,0 +1,32 @@
+project:
+  name: customer-account-service
+  description: customer account integration service
+
+server:
+  port: 8080
+  context-path: /device/platform/v1
+  tomcat:
+    accesslog:
+      enabled: true
+      directory: /var/log/java-app
+      prefix: access
+      suffix: .log
+      pattern: "%A %h %l %u %t '%r' %s %b %D"
+    max-http-header-size: 16384
+
+info:
+  app:
+    name: Device IOT Web Platform
+
+endpoints:
+  restart:
+    enabled: false
+  shutdown:
+    enabled: false
+
+logging:
+  level:
+    root: INFO
+    com:
+      homedepot:
+        customer: DEBUG
