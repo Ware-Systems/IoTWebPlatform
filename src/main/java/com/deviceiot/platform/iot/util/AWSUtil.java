@@ -86,6 +86,30 @@ public class AWSUtil {
         return new KeyStorePasswordPair(keyStore, keyPassword);
     }
 
+    public static KeyStore loadKeyStoreFromFile(String keyStoreFile, String keyStorePassword) {
+        File file = new File(keyStoreFile);
+        if (!file.exists()) {
+            System.out.println("KeyStore file not found: " + keyStoreFile);
+            return null;
+        }
+        KeyStore keyStore = null;
+        FileInputStream fis = null;
+        try {
+            keyStore = KeyStore.getInstance(KeyStore.getDefaultType());
+            fis = new FileInputStream(keyStoreFile);
+            keyStore.load(fis, keyStorePassword.toCharArray());
+        } catch (KeyStoreException | NoSuchAlgorithmException | CertificateException | IOException e) {
+            System.out.println("Failed to load key store");
+        } finally {
+            try {
+                fis.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        return keyStore;
+    }
+
     private static Certificate loadCertificateFromFile(String filename) {
         Certificate certificate = null;
 

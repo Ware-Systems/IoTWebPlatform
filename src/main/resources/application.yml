@@ -8,7 +8,7 @@ server:
   tomcat:
     accesslog:
       enabled: true
-      directory: /var/log/java-app
+      directory: /var/log/iot-app
       prefix: access
       suffix: .log
       pattern: "%A %h %l %u %t '%r' %s %b %D"
@@ -16,7 +16,7 @@ server:
 
 info:
   app:
-    name: Device IOT Web Platform
+    name: Thing IOT Web Platform
 
 endpoints:
   restart:

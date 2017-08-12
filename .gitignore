@@ -51,3 +51,6 @@ jmeter.log
 *.jar
 *.war
 *.ear
+
+### Certificates Folder ####/
+certs/
