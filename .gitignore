@@ -55,4 +55,4 @@ jmeter.log
 ### Certificates Folder ####/
 certs/
 
-resources/aws-config.properties
+aws-config.properties
