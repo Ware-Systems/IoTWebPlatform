@@ -49,14 +49,6 @@
         <jacoco.out.it.file>jacoco-it.exec</jacoco.out.it.file>
         <!-- Tells Sonar where the Jacoco coverage result file is located for Integration Tests -->
         <sonar.jacoco.itReportPath>${jacoco.outputDir}/${jacoco.out.it.file}</sonar.jacoco.itReportPath>
-        <!-- Sonar server connection details -->
-        <sonar.host.url>https://sonar.build.homedepot.com</sonar.host.url>
-        <sonar.login>jenkins</sonar.login>
-        <sonar.password>aurora#1</sonar.password>
-        <sonar.scm.disabled>true</sonar.scm.disabled>
-        <sonar.exclusions>
-         </sonar.exclusions>
-        <!-- === END of Sonar/Reporting settings === -->
     </properties>
 
     <dependencies>

@@ -28,5 +28,5 @@ logging:
   level:
     root: INFO
     com:
-      homedepot:
-        customer: DEBUG
+      deviceiot:
+        platform: DEBUG
