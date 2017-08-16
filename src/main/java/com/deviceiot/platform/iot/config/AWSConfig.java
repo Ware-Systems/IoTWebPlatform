@@ -22,8 +22,7 @@ import lombok.*;
 
 @Data
 @Component
-@PropertySources({
-        @PropertySource(value = "classpath:aws-config.properties", ignoreResourceNotFound = true) })
+@PropertySource(value = "classpath:aws-config.properties")
 public class AWSConfig {
 
     @Value("${clientEndpoint}")

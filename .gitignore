@@ -56,3 +56,5 @@ jmeter.log
 certs/
 
 aws-config.properties
+
+device-db.properties
