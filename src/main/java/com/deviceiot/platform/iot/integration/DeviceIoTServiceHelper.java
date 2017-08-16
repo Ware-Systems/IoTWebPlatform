@@ -3,6 +3,8 @@ package com.deviceiot.platform.iot.integration;
 import java.io.*;
 import java.net.*;
 import java.nio.*;
+import java.util.*;
+
 import org.springframework.beans.factory.annotation.*;
 import org.springframework.stereotype.*;
 import com.amazonaws.services.iot.*;
@@ -11,6 +13,9 @@ import com.amazonaws.services.iotdata.*;
 import com.amazonaws.services.iotdata.model.*;
 import com.deviceiot.platform.iot.config.*;
 import com.deviceiot.platform.iot.integration.dto.*;
+import com.deviceiot.platform.iot.integration.dto.MyLamp;
+import com.deviceiot.platform.iot.integration.dto.Sensor;
+import com.deviceiot.platform.model.*;
 import com.mashape.unirest.http.*;
 import com.mashape.unirest.http.JsonNode;
 import com.mashape.unirest.http.ObjectMapper;
@@ -62,20 +67,26 @@ public class DeviceIoTServiceHelper {
         return result;
     }
 
-    public String updateThingShadowAsync(String thingName, MyLamp myLamp) throws IOException, UnirestException {
+    public SensorShadow listSensorShadowAsync(String thingName) {
+        GetThingShadowRequest sensorShadowRequest = new GetThingShadowRequest().withThingName(thingName);
+        GetThingShadowResult sensorShadowResult = iotDataClient.getThingShadow(sensorShadowRequest);
+        SensorShadow sensorShadow = objectMapper.readValue(sensorShadowResult.getPayload().toString(), SensorShadow.class);
+        return sensorShadow;
+    }
 
-        String myLampJson = objectMapper.writeValue(myLamp);
+    public SensorShadow updateThingShadowAsync(String thingName, SensorShadow sensorShadow) {
 
-        ByteBuffer payload = ByteBuffer.wrap(myLampJson.getBytes());
+        String sensorShadowsJson = objectMapper.writeValue(sensorShadow);
+
+        ByteBuffer payload = ByteBuffer.wrap(sensorShadowsJson.getBytes());
 
         UpdateThingShadowRequest updateThingShadowRequest = new UpdateThingShadowRequest().withThingName(thingName);
         updateThingShadowRequest.setPayload(payload);
         UpdateThingShadowResult result = iotDataClient.updateThingShadow(updateThingShadowRequest);
 
-        byte[] bytes = new byte[result.getPayload().remaining()];
-        result.getPayload().get(bytes);
-        String resultString = new String(bytes);
-        return resultString;
+        SensorShadow sensorShadowResp = objectMapper.readValue(result.getPayload().toString(), SensorShadow.class);
+
+        return sensorShadowResp;
     }
 
 }

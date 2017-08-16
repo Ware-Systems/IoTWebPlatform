@@ -1,20 +1,17 @@
-package com.deviceiot.platform.model;
+package com.deviceiot.platform.iot.integration.dto;
 
 import java.util.*;
-
-import com.fasterxml.jackson.annotation.*;
 
 import lombok.*;
 
 /**
- * Created by admin on 8/12/17.
+ * Created by admin on 8/16/17.
  */
 @Data
 @ToString
 @AllArgsConstructor
 @NoArgsConstructor
-@JsonRootName("sensor")
-public class Sensor extends ThingShadow {
+public class Sensor {
 
     private String sensorID;
 

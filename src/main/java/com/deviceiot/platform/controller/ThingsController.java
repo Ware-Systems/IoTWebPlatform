@@ -46,23 +46,4 @@ public class ThingsController {
         return thingService.getAllThings();
     }
 
-    @ApiOperation(value = "Update Thing", nickname = "updateDevice")
-    @ApiResponses(value = {
-            @ApiResponse(code = 400, message = "Invalid Request"),
-            @ApiResponse(code = 401, message = "User Un-Authorized"),
-            @ApiResponse(code = 500, message = "Internal Server Error")
-    })
-    @RequestMapping(value="/{thingName}", method=RequestMethod.PUT, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public String udpateDeviceShadow(@PathVariable(value="thingName") String deviceName, @RequestBody MyLamp myLamp)
-            throws JSONException, IOException, UnirestException {
-        com.deviceiot.platform.iot.integration.dto.MyLamp myLampDTO = new com.deviceiot.platform.iot.integration.dto.MyLamp();
-        MyLampState myLampState = new MyLampState();
-        MyLampReported myLampReported = new MyLampReported();
-        myLampReported.setStatus(myLamp.getStatus());
-        myLampState.setReported(myLampReported);
-        myLampDTO.setState(myLampState);
-        return deviceIoTServiceHelper.updateThingShadowAsync(deviceName, myLampDTO);
-    }
-
-
 }

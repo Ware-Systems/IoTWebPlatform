@@ -1,4 +1,4 @@
-package com.deviceiot.platform.service;
+package com.deviceiot.platform.service.impl;
 
 import java.util.*;
 
@@ -9,6 +9,7 @@ import org.springframework.util.*;
 
 import com.deviceiot.platform.iot.integration.*;
 import com.deviceiot.platform.model.*;
+import com.deviceiot.platform.service.*;
 
 import lombok.extern.slf4j.*;
 
