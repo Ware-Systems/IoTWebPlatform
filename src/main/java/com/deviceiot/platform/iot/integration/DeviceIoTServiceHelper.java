@@ -61,22 +61,46 @@ public class DeviceIoTServiceHelper {
         return jsonResponse.getBody();
     }
 
+    /**
+     * Returns the state of a thing's shadow as known by AWS IoT cloud using REST call.
+     *
+     * @param thingName
+     * @return
+     */
+    public <T extends JsonNode> T  getThingShadowRest(String thingName, Class<T> responseType) throws MalformedURLException, UnirestException {
+        log.info("getThingShadow");
+
+        Unirest.setHttpClient(awsConfig.getHttpClient());
+
+        GetRequest request = Unirest.get(String.format("https://%s/things/%s/shadow", awsConfig.getClientEndpoint(), thingName));
+        log.info("Request created: " + request.toString());
+
+        DeviceUnirestV4Signer signer = new DeviceUnirestV4Signer();
+        request = signer.sign(request, awsConfig.getAccessKeyID(), awsConfig.getSecretAccessKey(), awsConfig.getRegion(), "iotdata");
+
+        HttpResponse<JsonNode> jsonResponse = request.asObject(responseType);
+        log.info(String.format("Response: %d, %s", jsonResponse.getStatus(), jsonResponse.getStatusText()));
+        log.info("Response: " + jsonResponse.getBody().toString());
+        return (T)jsonResponse.getBody();
+    }
+
     public ListThingsResult listThingsAsync() {
         ListThingsRequest request = new ListThingsRequest();
         ListThingsResult result = iotClient.listThings(request);
         return result;
     }
 
-    public SensorShadow listSensorShadowAsync(String thingName) {
+    public <T> T listThingShadowAsync(String thingName, Class<T> responseType) {
+        T responseObj = null;
         GetThingShadowRequest sensorShadowRequest = new GetThingShadowRequest().withThingName(thingName);
         GetThingShadowResult sensorShadowResult = iotDataClient.getThingShadow(sensorShadowRequest);
-        SensorShadow sensorShadow = objectMapper.readValue(sensorShadowResult.getPayload().toString(), SensorShadow.class);
-        return sensorShadow;
+        responseObj = objectMapper.readValue(sensorShadowResult.getPayload().toString(), responseType);
+        return responseObj;
     }
 
-    public SensorShadow updateThingShadowAsync(String thingName, SensorShadow sensorShadow) {
-
-        String sensorShadowsJson = objectMapper.writeValue(sensorShadow);
+    public <T> T updateThingShadowAsync(String thingName, Object requestObj, Class<T> responseType) {
+        T responseObj = null;
+        String sensorShadowsJson = objectMapper.writeValue(requestObj);
 
         ByteBuffer payload = ByteBuffer.wrap(sensorShadowsJson.getBytes());
 
@@ -84,9 +108,9 @@ public class DeviceIoTServiceHelper {
         updateThingShadowRequest.setPayload(payload);
         UpdateThingShadowResult result = iotDataClient.updateThingShadow(updateThingShadowRequest);
 
-        SensorShadow sensorShadowResp = objectMapper.readValue(result.getPayload().toString(), SensorShadow.class);
+        responseObj = objectMapper.readValue(result.getPayload().toString(), responseType);
 
-        return sensorShadowResp;
+        return responseObj;
     }
 
 }

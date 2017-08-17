@@ -27,11 +27,25 @@ public class SensorServiceImpl implements ISensorService {
     DeviceIoTFacade deviceIoTFacade;
 
     @Override
-    public List<Sensor> getAllSensorsData(String thingName) {
+    public List<Sensor> getAllSensorsCurrentData(String thingName) {
         if(!thingsMap.isEmpty() && StringUtils.isEmpty(thingName)) {
             thingName = thingsMap.entrySet().iterator().next().getKey();
         }
         return deviceIoTFacade.getSensorShadow(thingName);
+    }
+
+    @Override
+    public Sensor getSensorCurrentData(String thingName, String sensorID) {
+        if(!thingsMap.isEmpty() && StringUtils.isEmpty(thingName)) {
+            thingName = thingsMap.entrySet().iterator().next().getKey();
+        }
+        List<Sensor> sensors = deviceIoTFacade.getSensorShadow(thingName);
+        Sensor sensorResponse =  sensors
+                                    .stream()
+                                    .filter(sensor -> sensor.getSensorID().equalsIgnoreCase(sensorID))
+                                    .findAny()
+                                    .orElse(null);
+        return sensorResponse;
     }
 
     @Override

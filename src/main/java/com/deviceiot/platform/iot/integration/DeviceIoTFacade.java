@@ -38,7 +38,7 @@ public class DeviceIoTFacade {
 
     public List<com.deviceiot.platform.model.Sensor> getSensorShadow(String thingName) {
         List<com.deviceiot.platform.model.Sensor> sensorsData = new ArrayList<>();
-        SensorShadow sensorShadow = deviceIoTServiceHelper.listSensorShadowAsync(thingName);
+        SensorShadow sensorShadow = deviceIoTServiceHelper.listThingShadowAsync(thingName, SensorShadow.class);
         List<Sensor> sensors = sensorShadow.getState().getReported().getSensors();
         sensors.forEach(sensor -> {
             com.deviceiot.platform.model.Sensor sensorResponse = new com.deviceiot.platform.model.Sensor();
@@ -50,12 +50,14 @@ public class DeviceIoTFacade {
 
     public List<com.deviceiot.platform.model.Sensor> updateSensorShadow(String thingName, List<com.deviceiot.platform.model.Sensor> sensors) {
         List<com.deviceiot.platform.model.Sensor> sensorsData = new ArrayList<>();
+
         List<Sensor> sensorsDTO = new ArrayList<>();
         sensors.forEach(sensorReq -> {
             Sensor sensorDTO = new Sensor();
             BeanUtils.copyProperties(sensorReq, sensorDTO);
             sensorsDTO.add(sensorDTO);
         });
+
         SensorReported sensorReported = new SensorReported();
         sensorReported.setSensors(sensorsDTO);
         SensorState sensorState = new SensorState();
@@ -63,7 +65,8 @@ public class DeviceIoTFacade {
         SensorShadow sensorShadowReq = new SensorShadow();
         sensorShadowReq.setState(sensorState);
 
-        SensorShadow sensorShadowResp = deviceIoTServiceHelper.updateThingShadowAsync(thingName, sensorShadowReq);
+        SensorShadow sensorShadowResp = deviceIoTServiceHelper.updateThingShadowAsync(thingName, sensorShadowReq, SensorShadow.class);
+
         List<Sensor> sensorShadowReportResp = sensorShadowResp.getState().getReported().getSensors();
         sensorShadowReportResp.forEach(sensor -> {
             com.deviceiot.platform.model.Sensor sensorResponse = new com.deviceiot.platform.model.Sensor();

@@ -44,7 +44,7 @@ public class SensorController {
     })
     @RequestMapping(method=RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     public List<Sensor> getAllSensors(@RequestParam(value = "thingName") String thingName) throws JSONException, MalformedURLException, UnirestException {
-        return sensorService.getAllSensorsData(thingName);
+        return sensorService.getAllSensorsCurrentData(thingName);
     }
 
     @ApiOperation(value = "Gets sensor current state for given sensor id", nickname = "getAllSensors")
@@ -54,8 +54,8 @@ public class SensorController {
             @ApiResponse(code = 500, message = "Internal Server Error")
     })
     @RequestMapping(value = "/{sensorID}", method=RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-    public Sensor getSensorData(@PathVariable(value = "sensorID") String sensorID) {
-        return null;
+    public Sensor getSensorData(@PathVariable(value = "sensorID") String sensorID, @RequestParam(value = "thingName") String thingName) {
+        return sensorService.getSensorCurrentData(thingName, sensorID);
     }
 
     @ApiOperation(value = "Gets sensor for given sensor id for past requested timeframe ()", nickname = "getAllSensors")
@@ -64,7 +64,7 @@ public class SensorController {
             @ApiResponse(code = 401, message = "User Un-Authorized"),
             @ApiResponse(code = 500, message = "Internal Server Error")
     })
-    @RequestMapping(value = "/{sensorId}/data", method=RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    @RequestMapping(value = "/{sensorID}/data", method=RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     public List<Sensor> getSensorDataSecondly(@PathVariable(value = "sensorID") String sensorID,
                                             @RequestParam(value = "seconds") Integer seconds,
                                             @RequestParam(value = "minutes") Integer minutes,

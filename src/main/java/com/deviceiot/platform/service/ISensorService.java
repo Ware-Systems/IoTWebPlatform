@@ -9,7 +9,9 @@ import com.deviceiot.platform.model.*;
  */
 public interface ISensorService {
 
-    public List<Sensor> getAllSensorsData(String thingName);
+    public List<Sensor> getAllSensorsCurrentData(String thingName);
+
+    public Sensor getSensorCurrentData(String thingName, String sensorID);
 
     public List<Sensor> updateSensorsData(String thingName, List<Sensor> sensors);
 
