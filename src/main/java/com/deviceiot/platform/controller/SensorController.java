@@ -1,37 +1,25 @@
 package com.deviceiot.platform.controller;
 
-import java.io.*;
 import java.net.*;
 import java.util.*;
-
 import org.json.*;
 import org.springframework.beans.factory.annotation.*;
 import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
-
-import com.deviceiot.platform.iot.integration.*;
-import com.deviceiot.platform.iot.integration.dto.*;
-import com.deviceiot.platform.model.*;
-import com.deviceiot.platform.model.MyLamp;
 import com.deviceiot.platform.model.Sensor;
 import com.deviceiot.platform.service.*;
-import com.mashape.unirest.http.*;
 import com.mashape.unirest.http.exceptions.*;
-
 import io.swagger.annotations.*;
 import lombok.extern.slf4j.*;
 
 /**
  * Created by admin on 8/12/17.
  */
-@Api(tags = { "Sesnsor" }, description = "SensorShadow management")
+@Api(tags = { "Sensor" }, description = "Sensor Management")
 @RestController
 @RequestMapping("/sensor")
 @Slf4j
 public class SensorController {
-
-    @Autowired
-    DeviceIoTServiceHelper deviceIoTServiceHelper;
 
     @Autowired
     ISensorService sensorService;
@@ -43,7 +31,7 @@ public class SensorController {
             @ApiResponse(code = 500, message = "Internal Server Error")
     })
     @RequestMapping(method=RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-    public List<Sensor> getAllSensors(@RequestParam(value = "thingName") String thingName) throws JSONException, MalformedURLException, UnirestException {
+    public List<Sensor> getAllSensors(@RequestParam(value = "thingName", required = false) String thingName) throws JSONException, MalformedURLException, UnirestException {
         return sensorService.getAllSensorsCurrentData(thingName);
     }
 
@@ -54,7 +42,7 @@ public class SensorController {
             @ApiResponse(code = 500, message = "Internal Server Error")
     })
     @RequestMapping(value = "/{sensorID}", method=RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-    public Sensor getSensorData(@PathVariable(value = "sensorID") String sensorID, @RequestParam(value = "thingName") String thingName) {
+    public Sensor getSensorData(@PathVariable(value = "sensorID") String sensorID, @RequestParam(value = "thingName", required = false) String thingName) {
         return sensorService.getSensorCurrentData(thingName, sensorID);
     }
 
@@ -66,12 +54,12 @@ public class SensorController {
     })
     @RequestMapping(value = "/{sensorID}/data", method=RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     public List<Sensor> getSensorDataSecondly(@PathVariable(value = "sensorID") String sensorID,
-                                            @RequestParam(value = "seconds") Integer seconds,
-                                            @RequestParam(value = "minutes") Integer minutes,
-                                            @RequestParam(value = "hours") Integer hours,
-                                            @RequestParam(value = "days") Integer days,
-                                            @RequestParam(value = "weeks") Integer weeks,
-                                            @RequestParam(value = "months") Integer months) {
+                                            @RequestParam(value = "seconds", required = false) Integer seconds,
+                                            @RequestParam(value = "minutes", required = false) Integer minutes,
+                                            @RequestParam(value = "hours", required = false) Integer hours,
+                                            @RequestParam(value = "days", required = false) Integer days,
+                                            @RequestParam(value = "weeks", required = false) Integer weeks,
+                                            @RequestParam(value = "months", required = false) Integer months) {
         return null;
     }
 
