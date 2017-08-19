@@ -15,7 +15,6 @@ import com.mongodb.*;
  * Created by admin on 8/15/17.
  */
 @Configuration
-@PropertySource(value= "classpath:/device-db.properties")
 public class DeviceMongoConfig {
 
     @Autowired

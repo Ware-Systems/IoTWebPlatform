@@ -2,6 +2,8 @@ package com.deviceiot.platform.model;
 
 import java.util.*;
 
+import org.springframework.data.mongodb.core.mapping.*;
+
 import com.fasterxml.jackson.annotation.*;
 
 import lombok.*;
@@ -14,13 +16,14 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @JsonRootName("sensor")
+@Document(collection = "TempreatureSensor")
 public class Sensor extends ThingShadow {
 
     private String sensorID;
 
     private String sensorName;
 
-    private String sensorState;
+    private Integer sensorState;
 
     private Float tempreature;
 

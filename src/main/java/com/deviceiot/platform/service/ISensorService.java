@@ -15,4 +15,6 @@ public interface ISensorService {
 
     public List<Sensor> updateSensorsData(String thingName, List<Sensor> sensors);
 
+    public List<Sensor> getSensorCurrentByCriteria(String thingName, String sensorID, Integer seconds, Integer minutes, Integer hours, Integer days, Integer weeks, Integer months);
+
 }

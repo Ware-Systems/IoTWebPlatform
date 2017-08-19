@@ -54,13 +54,14 @@ public class SensorController {
     })
     @RequestMapping(value = "/{sensorID}/data", method=RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     public List<Sensor> getSensorDataSecondly(@PathVariable(value = "sensorID") String sensorID,
+                                            @RequestParam(value = "thingName", required = false) String thingName,
                                             @RequestParam(value = "seconds", required = false) Integer seconds,
                                             @RequestParam(value = "minutes", required = false) Integer minutes,
                                             @RequestParam(value = "hours", required = false) Integer hours,
                                             @RequestParam(value = "days", required = false) Integer days,
                                             @RequestParam(value = "weeks", required = false) Integer weeks,
                                             @RequestParam(value = "months", required = false) Integer months) {
-        return null;
+        return sensorService.getSensorCurrentByCriteria(thingName, sensorID,seconds, minutes, hours, days, weeks, months);
     }
 
     @ApiOperation(value = "Update Sensor Data", nickname = "updateSensor")

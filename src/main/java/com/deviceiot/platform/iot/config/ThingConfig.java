@@ -24,14 +24,14 @@ public class ThingConfig {
     @Bean(name="thingsMap" )
     public HashMap<String, Thing> getAllThings () {
        HashMap<String, Thing> thingsMap = new HashMap<>();
-       List<com.deviceiot.platform.iot.integration.dto.Thing> thingsList = deviceIoTFacade.getThings();
+       /*List<com.deviceiot.platform.iot.integration.dto.Thing> thingsList = deviceIoTFacade.getThings();
        if(!CollectionUtils.isEmpty(thingsList)) {
            thingsList.forEach(thingDTO -> {
                Thing thing = new Thing();
                BeanUtils.copyProperties(thingDTO, thing);
                thingsMap.put(thing.getThingName(), thing);
            });
-       }
+       }*/
        return thingsMap;
     }
 

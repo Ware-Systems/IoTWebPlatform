@@ -17,7 +17,7 @@ public class Sensor {
 
     private String sensorName;
 
-    private String sensorState;
+    private Integer sensorState;
 
     private Float tempreature;
 
