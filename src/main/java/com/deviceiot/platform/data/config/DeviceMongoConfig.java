@@ -28,13 +28,13 @@ public class DeviceMongoConfig {
        return builder;
     }
 
-    /*@Bean
+    @Bean
     public MongoClient mongoClient() throws UnknownHostException {
-        MongoClientOptions.Builder builder =  getMongoClientOptionsBuilder();
-        MongoClientOptions options = builder.build();
-        MongoClient mongoClient = new MongoClient(new ServerAddress(env.getProperty("mongo.server"), Integer.parseInt( env.getProperty("mongo.port"))), options);
+        String mongoURI = env.getProperty("mongo.uri");
+        MongoClientURI mongoClientURI = new MongoClientURI(mongoURI, getMongoClientOptionsBuilder());
+        MongoClient mongoClient = new MongoClient(mongoClientURI);
         return mongoClient;
-    }*/
+    }
 
     @Bean
     public MongoDbFactory mongoDbFactory() throws UnknownHostException {
