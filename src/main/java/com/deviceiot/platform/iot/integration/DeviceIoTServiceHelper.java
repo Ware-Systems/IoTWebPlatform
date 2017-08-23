@@ -1,10 +1,7 @@
 package com.deviceiot.platform.iot.integration;
 
-import java.io.*;
 import java.net.*;
 import java.nio.*;
-import java.util.*;
-
 import org.springframework.beans.factory.annotation.*;
 import org.springframework.stereotype.*;
 import com.amazonaws.services.iot.*;
@@ -16,6 +13,7 @@ import com.deviceiot.platform.iot.integration.dto.*;
 import com.deviceiot.platform.iot.integration.dto.MyLamp;
 import com.deviceiot.platform.iot.integration.dto.Sensor;
 import com.deviceiot.platform.model.*;
+import com.deviceiot.platform.util.*;
 import com.mashape.unirest.http.*;
 import com.mashape.unirest.http.JsonNode;
 import com.mashape.unirest.http.ObjectMapper;
@@ -47,14 +45,17 @@ public class DeviceIoTServiceHelper {
     @Qualifier("iotClient")
     private AWSIot iotClient;
 
+    @Autowired
+    private EnvPropertyUtil env;
+
     public JsonNode listThingsRestJson() throws UnirestException, MalformedURLException {
         Unirest.setHttpClient(awsConfig.getHttpClient());
 
-        GetRequest request = Unirest.get("https://iot." + awsConfig.getRegion() + ".amazonaws.com/things");
+        GetRequest request = Unirest.get("https://iot." + env.getAwsRegion() + ".amazonaws.com/things");
         log.info("Request created: " + request.toString());
 
         DeviceUnirestV4Signer signer = new DeviceUnirestV4Signer();
-        request = signer.sign(request, awsConfig.getAccessKeyID(), awsConfig.getSecretAccessKey(), awsConfig.getRegion(), "execute-api");
+        request = signer.sign(request, env.getAccessKeyID(), env.getSecretAccessKey(), env.getAwsRegion(), "execute-api");
 
         HttpResponse<JsonNode> jsonResponse = request.asJson();
         log.info(String.format("Response: %d, %s", jsonResponse.getStatus(), jsonResponse.getStatusText()));
@@ -72,11 +73,13 @@ public class DeviceIoTServiceHelper {
 
         Unirest.setHttpClient(awsConfig.getHttpClient());
 
-        GetRequest request = Unirest.get(String.format("https://%s/things/%s/shadow", awsConfig.getClientEndpoint(), thingName));
+        String clientEndpoint = String.format("%s.%s.amazonaws.com", env.getAwsResourceID(), env.getAwsRegion(), env.getAwsResourcePort());
+
+        GetRequest request = Unirest.get(String.format("https://%s/things/%s/shadow", clientEndpoint, thingName));
         log.info("Request created: " + request.toString());
 
         DeviceUnirestV4Signer signer = new DeviceUnirestV4Signer();
-        request = signer.sign(request, awsConfig.getAccessKeyID(), awsConfig.getSecretAccessKey(), awsConfig.getRegion(), "iotdata");
+        request = signer.sign(request, env.getAccessKeyID(), env.getSecretAccessKey(), env.getAwsRegion(), "iotdata");
 
         HttpResponse<JsonNode> jsonResponse = request.asObject(responseType);
         log.info(String.format("Response: %d, %s", jsonResponse.getStatus(), jsonResponse.getStatusText()));

@@ -64,6 +64,24 @@ public class SensorController {
         return sensorService.getSensorCurrentByCriteria(thingName, sensorID,seconds, minutes, hours, days, weeks, months);
     }
 
+    @ApiOperation(value = "Gets sensor for given sensor id for past requested timeframe ()", nickname = "getAllSensors")
+    @ApiResponses(value = {
+            @ApiResponse(code = 400, message = "Invalid Request"),
+            @ApiResponse(code = 401, message = "User Un-Authorized"),
+            @ApiResponse(code = 500, message = "Internal Server Error")
+    })
+    @RequestMapping(value = "/data", method=RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    public List<Sensor> getSensorDataSecondly(@RequestParam(value = "thingName", required = false) String thingName,
+            @RequestParam(value = "seconds", required = false) Integer seconds,
+            @RequestParam(value = "minutes", required = false) Integer minutes,
+            @RequestParam(value = "hours", required = false) Integer hours,
+            @RequestParam(value = "days", required = false) Integer days,
+            @RequestParam(value = "weeks", required = false) Integer weeks,
+            @RequestParam(value = "months", required = false) Integer months) {
+        return sensorService.getSensorCurrentByCriteria(thingName, null, seconds, minutes, hours, days, weeks,
+                months);
+    }
+
     @ApiOperation(value = "Update Sensor Data", nickname = "updateSensor")
     @ApiResponses(value = {
             @ApiResponse(code = 400, message = "Invalid Request"),

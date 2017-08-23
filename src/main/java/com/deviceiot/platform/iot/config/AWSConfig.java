@@ -11,6 +11,7 @@ import org.springframework.stereotype.*;
 import com.amazonaws.auth.*;
 import com.amazonaws.services.iot.*;
 import com.amazonaws.services.iotdata.*;
+import com.deviceiot.platform.util.*;
 import com.fasterxml.jackson.core.*;
 import com.mashape.unirest.http.ObjectMapper;
 
@@ -22,33 +23,14 @@ import lombok.*;
 
 @Data
 @Component
-@PropertySource(value = "classpath:aws-config.properties")
 public class AWSConfig {
-
-    @Value("${clientEndpoint}")
-    private String clientEndpoint;
-
-    @Value("${clientId}")
-    private String clientId;
-
-    @Value("${certificateFile}")
-    private String certificateFile;
-
-    @Value("${privateKeyFile}")
-    private String privateKeyFile;
-
-    @Value("${accessKeyID}")
-    private String accessKeyID;
-
-    @Value("${secretAccessKey}")
-    private String secretAccessKey;
-
-    @Value("${region}")
-    private String region;
 
     @Autowired
     @Qualifier("httpClient")
     HttpClient httpClient;
+
+    @Autowired
+    EnvPropertyUtil env;
 
     @Bean(name = "httpClient")
     public HttpClient getHttpClient(){
@@ -83,8 +65,8 @@ public class AWSConfig {
     @Bean(name = "iotDataClient")
     public AWSIotData getDataClient() {
        AWSIotData iotDataClient = AWSIotDataClientBuilder.standard().withCredentials(new AWSStaticCredentialsProvider(
-                new BasicAWSCredentials(accessKeyID, secretAccessKey))).
-                withRegion(region).build();
+                new BasicAWSCredentials(env.getAccessKeyID(), env.getSecretAccessKey()))).
+                withRegion(env.getAwsRegion()).build();
 
         return iotDataClient;
     }
@@ -92,8 +74,8 @@ public class AWSConfig {
     @Bean(name = "iotClient")
     public AWSIot getClient() {
         AWSIot iotClient = AWSIotClientBuilder.standard().withCredentials(new AWSStaticCredentialsProvider(
-                new BasicAWSCredentials(accessKeyID, secretAccessKey))).
-                withRegion(region).build();
+                new BasicAWSCredentials(env.getAccessKeyID(), env.getSecretAccessKey()))).
+                withRegion(env.getAwsRegion()).build();
 
         return iotClient;
     }
