@@ -50,7 +50,11 @@ public class SensorDAOImpl implements SensorDAO {
 
         java.time.Instant instant = java.time.Instant.parse(dateTime.toString()); //Pass your date.
         Date timestamp = Date.from(instant);
-        DBObject query = QueryBuilder.start("sensorID").is(sensorID).and("lastModifiedDate").greaterThanEquals(timestamp).get();
+        DBObject query = null;
+        if(null != sensorID)
+            query = QueryBuilder.start("sensorID").is(sensorID).and("lastModifiedDate").greaterThanEquals(timestamp).get();
+        else
+            query = QueryBuilder.start("lastModifiedDate").greaterThanEquals(timestamp).get();
         BasicQuery basicQuery = new BasicQuery(query);
         basicQuery.with(new Sort(Sort.Direction.DESC,"lastModifiedDate"));
         List<Sensor> sensors = mongoTemplate.find(basicQuery, Sensor.class, "TempreatureSensor");
