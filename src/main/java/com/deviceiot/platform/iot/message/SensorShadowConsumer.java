@@ -1,3 +1,4 @@
+/*
 package com.deviceiot.platform.iot.message;
 
 import javax.annotation.*;
@@ -37,3 +38,4 @@ public class SensorShadowConsumer implements MqttCallback {
 
     }
 }
+*/

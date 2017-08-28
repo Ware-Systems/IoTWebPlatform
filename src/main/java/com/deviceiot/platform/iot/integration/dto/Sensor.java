@@ -21,6 +21,6 @@ public class Sensor {
 
     private Float tempreature;
 
-    private Date lastModifiedDate;
+    private Date timestamp;
 
 }

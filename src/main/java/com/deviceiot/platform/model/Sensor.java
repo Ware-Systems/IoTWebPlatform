@@ -27,6 +27,6 @@ public class Sensor extends ThingShadow {
 
     private Float tempreature;
 
-    private Date lastModifiedDate;
+    private Date timestamp;
 
 }

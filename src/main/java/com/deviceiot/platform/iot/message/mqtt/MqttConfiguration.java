@@ -1,3 +1,4 @@
+/*
 package com.deviceiot.platform.iot.message.mqtt;
 
 import javax.net.ssl.*;
@@ -36,3 +37,4 @@ public class MqttConfiguration {
     }
 
 }
+*/

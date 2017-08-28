@@ -1,3 +1,4 @@
+/*
 package com.deviceiot.platform.iot.message.mqtt;
 
 import javax.net.ssl.*;
@@ -11,3 +12,4 @@ public class MqttTemplate extends MqttClient {
     }
 
 }
+*/

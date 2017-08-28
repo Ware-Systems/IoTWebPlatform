@@ -99,11 +99,11 @@
             <artifactId>aws-java-sdk-iot</artifactId>
         </dependency>
 
-        <dependency>
+        <!--<dependency>
             <groupId>org.eclipse.paho</groupId>
             <artifactId>org.eclipse.paho.client.mqttv3</artifactId>
             <version>1.0.2</version>
-        </dependency>
+        </dependency>-->
 
         <dependency>
             <groupId>com.mashape.unirest</groupId>
