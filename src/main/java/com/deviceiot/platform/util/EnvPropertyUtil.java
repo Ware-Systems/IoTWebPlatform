@@ -24,9 +24,6 @@ public class EnvPropertyUtil {
     @Value("${"+GlobalConstants.AWS_REGION+"}")
     private String awsRegion;
 
-    @Value("${"+GlobalConstants.AWS_RESOURCE_PORT+"}")
-    private String awsResourcePort;
-
     @Value("${"+GlobalConstants.ACCESS_KEY_ID+"}")
     private String accessKeyID;
 

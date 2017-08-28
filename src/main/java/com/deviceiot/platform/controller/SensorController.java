@@ -31,7 +31,7 @@ public class SensorController {
             @ApiResponse(code = 500, message = "Internal Server Error")
     })
     @RequestMapping(method=RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-    public List<Sensor> getAllSensors(@RequestParam(value = "thingName", required = false) String thingName) throws JSONException, MalformedURLException, UnirestException {
+    public List<Sensor> getAllSensorsData(@RequestParam(value = "thingName", required = false) String thingName) throws JSONException, MalformedURLException, UnirestException {
         return sensorService.getAllSensorsCurrentData(thingName);
     }
 

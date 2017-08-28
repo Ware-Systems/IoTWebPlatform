@@ -2,6 +2,8 @@ package com.deviceiot.platform.iot.integration;
 
 import java.net.*;
 import java.nio.*;
+import java.time.*;
+
 import org.springframework.beans.factory.annotation.*;
 import org.springframework.stereotype.*;
 import com.amazonaws.services.iot.*;
@@ -9,10 +11,6 @@ import com.amazonaws.services.iot.model.*;
 import com.amazonaws.services.iotdata.*;
 import com.amazonaws.services.iotdata.model.*;
 import com.deviceiot.platform.iot.config.*;
-import com.deviceiot.platform.iot.integration.dto.*;
-import com.deviceiot.platform.iot.integration.dto.MyLamp;
-import com.deviceiot.platform.iot.integration.dto.Sensor;
-import com.deviceiot.platform.model.*;
 import com.deviceiot.platform.util.*;
 import com.mashape.unirest.http.*;
 import com.mashape.unirest.http.JsonNode;
@@ -68,23 +66,29 @@ public class DeviceIoTServiceHelper {
      * @param thingName
      * @return
      */
-    public <T extends JsonNode> T  getThingShadowRest(String thingName, Class<T> responseType) throws MalformedURLException, UnirestException {
+    public <T> T  getThingShadowRest(String thingName, Class<T> responseType) {
+        Instant before = Instant.now();
+        HttpResponse<T> response = null;
         log.info("getThingShadow");
-
         Unirest.setHttpClient(awsConfig.getHttpClient());
-
-        String clientEndpoint = String.format("%s.%s.amazonaws.com", env.getAwsResourceID(), env.getAwsRegion(), env.getAwsResourcePort());
+        Unirest.setObjectMapper(objectMapper);
+        String clientEndpoint = String.format("%s.%s.amazonaws.com", env.getAwsResourceID(), env.getAwsRegion());
 
         GetRequest request = Unirest.get(String.format("https://%s/things/%s/shadow", clientEndpoint, thingName));
         log.info("Request created: " + request.toString());
-
         DeviceUnirestV4Signer signer = new DeviceUnirestV4Signer();
-        request = signer.sign(request, env.getAccessKeyID(), env.getSecretAccessKey(), env.getAwsRegion(), "iotdata");
-
-        HttpResponse<JsonNode> jsonResponse = request.asObject(responseType);
-        log.info(String.format("Response: %d, %s", jsonResponse.getStatus(), jsonResponse.getStatusText()));
-        log.info("Response: " + jsonResponse.getBody().toString());
-        return (T)jsonResponse.getBody();
+        try {
+            request = signer.sign(request, env.getAccessKeyID(), env.getSecretAccessKey(), env.getAwsRegion(), "iotdata");
+            response = request.asObject(responseType);
+            log.info(String.format("Response: %d, %s", response.getStatus(), response.getStatusText()));
+            log.info("Response: " + response.getBody().toString());
+            Instant after = Instant.now();
+            long delta = Duration.between(before, after).toMillis();
+            log.info("listThingShadowAsync - Total Time taken : {} ms", delta);
+        } catch (MalformedURLException | UnirestException ex) {
+            ex.printStackTrace();
+        }
+        return null != response ? response.getBody() : null;
     }
 
     public ListThingsResult listThingsAsync() {
@@ -94,10 +98,18 @@ public class DeviceIoTServiceHelper {
     }
 
     public <T> T listThingShadowAsync(String thingName, Class<T> responseType) {
-        T responseObj = null;
+        Instant before = Instant.now();
         GetThingShadowRequest sensorShadowRequest = new GetThingShadowRequest().withThingName(thingName);
         GetThingShadowResult sensorShadowResult = iotDataClient.getThingShadow(sensorShadowRequest);
-        responseObj = objectMapper.readValue(sensorShadowResult.getPayload().toString(), responseType);
+
+        byte[] bytes = new byte[sensorShadowResult.getPayload().remaining()];
+        sensorShadowResult.getPayload().get(bytes);
+        String resultString = new String(bytes);
+
+        T responseObj = objectMapper.readValue(resultString, responseType);
+        Instant after = Instant.now();
+        long delta = Duration.between(before, after).toMillis();
+        log.info("listThingShadowAsync - Total Time taken : {} ms", delta);
         return responseObj;
     }
 

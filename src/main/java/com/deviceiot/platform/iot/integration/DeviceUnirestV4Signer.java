@@ -22,8 +22,6 @@ public class DeviceUnirestV4Signer {
 
 
     public GetRequest sign(GetRequest request, String awsAccessKeyId, String awsSecretAccessKey, String region, String serviceName) throws MalformedURLException {
-        System.err.println("sign without body");
-
         URL url = new URL(request.getUrl());
         TreeMap<String, String> hostHeader = new TreeMap<String, String>();
         hostHeader.put("host", url.getHost());
@@ -51,7 +49,6 @@ public class DeviceUnirestV4Signer {
     }
 
     public HttpRequestWithBody sign(HttpRequestWithBody request, String awsAccessKeyId, String awsSecretAccessKey, String region, String serviceName) throws IOException {
-        System.err.println("sign with body");
         URL url = new URL(request.getUrl());
         TreeMap<String, String> hostHeader = new TreeMap<String, String>();
         hostHeader.put("host", url.getHost());
@@ -66,7 +63,6 @@ public class DeviceUnirestV4Signer {
         this.urlQueryString = new URL(request.getUrl()).getQuery();
         this.awsHeaders = hostHeader;
         this.payload = (request.getBody() != null ? IOUtils.toString(request.getBody().getEntity().getContent()) : null);
-        System.err.println("Payload: " + this.payload);
         this.debug = true;
 
         xAmzDate = getTimeStamp();
@@ -170,11 +166,6 @@ public class DeviceUnirestV4Signer {
         /* Step 1.6 Use a hash (digest) function like SHA256 to create a hashed value from the payload in the body of the HTTP or HTTPS. */
         payload = payload == null ? "" : payload;
         canonicalURL.append(generateHex(payload));
-
-        if (debug) {
-            System.out.println("##Canonical Request:\n" + canonicalURL.toString());
-        }
-        log.info("##Canonical Request:\n" + canonicalURL.toString());
         return canonicalURL.toString();
     }
 
@@ -198,10 +189,6 @@ public class DeviceUnirestV4Signer {
 
         /* Step 2.4 Append the hash of the canonical request that you created in Task 1: Create a Canonical Request for Signature Version 4. */
         stringToSign += generateHex(canonicalURL);
-
-        if (debug) {
-            System.out.println("##String to sign:\n" + stringToSign);
-        }
 
         return stringToSign;
     }
@@ -251,20 +238,8 @@ public class DeviceUnirestV4Signer {
             Map<String, String> header = new HashMap<String, String>(0);
             header.put("x-amz-date", xAmzDate);
             header.put("Authorization", buildAuthorizationString(signature));
-
-            if (debug) {
-                System.out.println("##Signature:\n" + signature);
-                System.out.println("##Header:");
-                for (Map.Entry<String, String> entrySet : header.entrySet()) {
-                    System.out.println(entrySet.getKey() + " = " + entrySet.getValue());
-                }
-                System.out.println("================================");
-            }
             return header;
         } else {
-            if (debug) {
-                System.out.println("##Signature:\n" + signature);
-            }
             return null;
         }
     }
