@@ -16,6 +16,7 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @JsonRootName("sensor")
+@JsonInclude(JsonInclude.Include.NON_NULL)
 @Document(collection = "TempreatureSensor")
 public class Sensor extends ThingShadow {
 

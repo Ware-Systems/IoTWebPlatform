@@ -12,6 +12,7 @@ import com.amazonaws.auth.*;
 import com.amazonaws.services.iot.*;
 import com.amazonaws.services.iotdata.*;
 import com.deviceiot.platform.util.*;
+import com.fasterxml.jackson.annotation.*;
 import com.fasterxml.jackson.core.*;
 import com.fasterxml.jackson.databind.*;
 import com.mashape.unirest.http.ObjectMapper;
@@ -47,6 +48,7 @@ public class AWSConfig {
 
             public <T> T readValue(String value, Class<T> valueType) {
                 try {
+                    jacksonObjectMapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
                     jacksonObjectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
                     return jacksonObjectMapper.readValue(value, valueType);
                 } catch (IOException e) {
@@ -56,6 +58,7 @@ public class AWSConfig {
 
             public String writeValue(Object value) {
                 try {
+                    jacksonObjectMapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
                     jacksonObjectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
                     return jacksonObjectMapper.writeValueAsString(value);
                 } catch (JsonProcessingException e) {

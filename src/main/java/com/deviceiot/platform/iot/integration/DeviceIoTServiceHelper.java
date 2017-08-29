@@ -67,7 +67,6 @@ public class DeviceIoTServiceHelper {
      * @return
      */
     public <T> T  getThingShadowRest(String thingName, Class<T> responseType) {
-        Instant before = Instant.now();
         HttpResponse<T> response = null;
         log.info("getThingShadow");
         Unirest.setHttpClient(awsConfig.getHttpClient());
@@ -83,8 +82,6 @@ public class DeviceIoTServiceHelper {
             log.info(String.format("Response: %d, %s", response.getStatus(), response.getStatusText()));
             log.info("Response: " + response.getBody().toString());
             Instant after = Instant.now();
-            long delta = Duration.between(before, after).toMillis();
-            log.info("listThingShadowAsync - Total Time taken : {} ms", delta);
         } catch (MalformedURLException | UnirestException ex) {
             ex.printStackTrace();
         }
@@ -98,23 +95,17 @@ public class DeviceIoTServiceHelper {
     }
 
     public <T> T listThingShadowAsync(String thingName, Class<T> responseType) {
-        Instant before = Instant.now();
         GetThingShadowRequest sensorShadowRequest = new GetThingShadowRequest().withThingName(thingName);
         GetThingShadowResult sensorShadowResult = iotDataClient.getThingShadow(sensorShadowRequest);
 
         byte[] bytes = new byte[sensorShadowResult.getPayload().remaining()];
         sensorShadowResult.getPayload().get(bytes);
         String resultString = new String(bytes);
-
         T responseObj = objectMapper.readValue(resultString, responseType);
-        Instant after = Instant.now();
-        long delta = Duration.between(before, after).toMillis();
-        log.info("listThingShadowAsync - Total Time taken : {} ms", delta);
         return responseObj;
     }
 
     public <T> T updateThingShadowAsync(String thingName, Object requestObj, Class<T> responseType) {
-        T responseObj = null;
         String sensorShadowsJson = objectMapper.writeValue(requestObj);
 
         ByteBuffer payload = ByteBuffer.wrap(sensorShadowsJson.getBytes());
@@ -123,7 +114,11 @@ public class DeviceIoTServiceHelper {
         updateThingShadowRequest.setPayload(payload);
         UpdateThingShadowResult result = iotDataClient.updateThingShadow(updateThingShadowRequest);
 
-        responseObj = objectMapper.readValue(result.getPayload().toString(), responseType);
+        byte[] bytes = new byte[result.getPayload().remaining()];
+        result.getPayload().get(bytes);
+        String resultString = new String(bytes);
+
+        T responseObj = objectMapper.readValue(resultString, responseType);
 
         return responseObj;
     }

@@ -42,7 +42,7 @@ public class SensorController {
             @ApiResponse(code = 500, message = "Internal Server Error")
     })
     @RequestMapping(value = "/{sensorID}", method=RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-    public Sensor getSensorData(@PathVariable(value = "sensorID") String sensorID, @RequestParam(value = "thingName", required = false) String thingName) {
+    public Sensor getSensorData(@RequestParam(value = "thingName", required = false) String thingName, @PathVariable(value = "sensorID") String sensorID) {
         return sensorService.getSensorCurrentData(thingName, sensorID);
     }
 
@@ -88,8 +88,8 @@ public class SensorController {
             @ApiResponse(code = 401, message = "User Un-Authorized"),
             @ApiResponse(code = 500, message = "Internal Server Error")
     })
-    @RequestMapping(value="/{thingName}", method=RequestMethod.PUT, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public List<Sensor> udpateSensorShadow(@PathVariable(value="thingName") String thingName, @RequestBody List<Sensor> sensors){
+    @RequestMapping(method=RequestMethod.PUT, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public List<Sensor> udpateSensorShadow(@RequestParam(value = "thingName", required = false) String thingName, @RequestBody List<Sensor> sensors){
        return sensorService.updateSensorsData(thingName, sensors);
     }
 

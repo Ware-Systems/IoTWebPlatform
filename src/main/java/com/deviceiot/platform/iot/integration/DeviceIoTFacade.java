@@ -11,6 +11,7 @@ import com.deviceiot.platform.iot.integration.dto.*;
 import com.deviceiot.platform.iot.integration.dto.Sensor;
 import com.deviceiot.platform.iot.integration.dto.Thing;
 import com.deviceiot.platform.model.*;
+import com.deviceiot.platform.util.*;
 
 import lombok.extern.slf4j.*;
 
@@ -60,6 +61,7 @@ public class DeviceIoTFacade {
 
         SensorReported sensorReported = new SensorReported();
         sensorReported.setSensors(sensorsDTO);
+        sensorReported.setSourcesystem(GlobalConstants.SOURCE_SYSTEM_WEB);
         SensorState sensorState = new SensorState();
         sensorState.setReported(sensorReported);
         SensorShadow sensorShadowReq = new SensorShadow();

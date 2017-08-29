@@ -8,15 +8,10 @@ import org.json.*;
 import org.springframework.beans.factory.annotation.*;
 import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
-
 import com.deviceiot.platform.iot.integration.*;
-import com.deviceiot.platform.iot.integration.dto.*;
-import com.deviceiot.platform.model.*;
-import com.deviceiot.platform.model.MyLamp;
 import com.deviceiot.platform.model.Thing;
 import com.deviceiot.platform.service.*;
 import com.mashape.unirest.http.exceptions.*;
-
 import io.swagger.annotations.*;
 import lombok.extern.slf4j.*;
 

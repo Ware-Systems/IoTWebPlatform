@@ -20,4 +20,5 @@ public class GlobalConstants {
     public static final String AWS_REGION = "AWS_REGION";
     public static final String ACCESS_KEY_ID = "ACCESS_KEY_ID";
     public static final String SECRET_ACCESS_KEY_ID = "SECRET_ACCESS_KEY_ID";
+    public static final String SOURCE_SYSTEM_WEB = "web";
 }
