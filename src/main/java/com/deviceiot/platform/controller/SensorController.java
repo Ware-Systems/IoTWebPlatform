@@ -13,7 +13,7 @@ import io.swagger.annotations.*;
 import lombok.extern.slf4j.*;
 
 /**
- * Created by admin on 8/12/17.
+ * Created by Nitin Ware on 8/12/17.
  */
 @Api(tags = { "Sensor" }, description = "Sensor Management")
 @RestController
